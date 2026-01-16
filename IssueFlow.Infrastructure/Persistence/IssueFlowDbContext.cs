@@ -20,6 +20,120 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<IssueStatus> IssueStatuses { get; set; }
     public DbSet<IssuePriority> IssuePriorities { get; set; }
 
+    private void SeedDatabase(ModelBuilder builder)
+    {
+        var now = DateTime.UtcNow;
+
+        // add a range of issue priorities
+        builder.Entity<IssuePriority>().HasData(
+            new IssuePriority { 
+                Id = SeedIds.IssuePriorities.Low, 
+                Name = "Low", 
+                Description = "Low priority tasks and small bug fixes",
+                SortOrder = 1,
+                CreatedAt = now
+            },
+            new IssuePriority
+            { 
+                Id = SeedIds.IssuePriorities.Medium, 
+                Name = "Medium", 
+                Description = "Tasks and issues that take precendence over Low, but not High",
+                SortOrder = 2,
+                CreatedAt = now
+            },
+            new IssuePriority
+            { 
+                Id = SeedIds.IssuePriorities.High, 
+                Name = "High", 
+                Description = "Critical tasks and blockers that need immediate attention",
+                SortOrder = 3,
+                CreatedAt = now
+            }
+        );
+
+        builder.Entity<IssueStatus>().HasData(
+            new IssueStatus { 
+                Id = SeedIds.IssueStatuses.Todo, 
+                Name = "To Do", 
+                Description = "Issues that are yet to be started",
+                IsFinal = false,
+                SortOrder = 1,
+                CreatedAt = now
+            },
+            new IssueStatus
+            {
+                Id = SeedIds.IssueStatuses.InProgress,
+                Name = "In Progress",
+                Description = "Issues that are currently being worked on",
+                IsFinal = false,
+                SortOrder = 2,
+                CreatedAt = now
+            },
+            new IssueStatus
+            {
+                Id = SeedIds.IssueStatuses.Blocked,
+                Name = "Blocked",
+                Description = "Issues that are blocked and cannot proceed",
+                IsFinal = false,
+                SortOrder = 3,
+                CreatedAt = now
+            },
+            new IssueStatus
+            {
+                Id = SeedIds.IssueStatuses.Done,
+                Name = "Done",
+                Description = "Issues that have been completed",
+                IsFinal = true,
+                SortOrder = 4,
+                CreatedAt = now
+            },
+            new IssueStatus 
+            {
+                Id = SeedIds.IssueStatuses.Resolved,
+                Name = "Resolved",
+                Description = "Issues that are no longer active for any reason",
+                IsFinal = true,
+                SortOrder = 5,
+                CreatedAt = now
+            }
+        );
+
+        builder.Entity<IssueType>().HasData(
+            new IssueType
+            {
+                Id = SeedIds.IssueTypes.Bug,
+                Name = "Bug",
+                Description = "A problem which impairs or prevents the functions of the product",
+                SortOrder = 1,
+                CreatedAt = now
+            },
+            new IssueType
+            {
+                Id = SeedIds.IssueTypes.Task,
+                Name = "Task",
+                Description = "A general task that needs to be accomplished",
+                SortOrder = 2,
+                CreatedAt = now
+            },
+            new IssueType
+            {
+                Id = SeedIds.IssueTypes.Story,
+                Name = "Story",
+                Description = "A user story that describes a feature from the end-user perspective",
+                SortOrder = 3,
+                CreatedAt = now
+            },
+            new IssueType
+            {
+                Id = SeedIds.IssueTypes.Epic,
+                Name = "Epic",
+                Description = "A large body of work that can be broken down into smaller tasks or stories",
+                SortOrder = 4,
+                CreatedAt = now
+            }
+        );
+    }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -62,6 +176,9 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<Issue>()
             .HasIndex(i => new { i.ProjectId, i.Key })
             .IsUnique();
+
+        // Seed initial data
+        SeedDatabase(builder);
     }
 }
 
