@@ -26,3 +26,5 @@ The project exposes an extension method to register services in the DI container
 
 ```csharp
 builder.Services.AddInfrastructure(builder.Configuration);
+```
+

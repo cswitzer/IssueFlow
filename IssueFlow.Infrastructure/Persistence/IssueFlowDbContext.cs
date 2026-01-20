@@ -181,6 +181,3 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
         SeedDatabase(builder);
     }
 }
-
-// TODO: Make migrations AND use fluent validation inside of Application to decouple models from
-// data validations, which is a business thing
