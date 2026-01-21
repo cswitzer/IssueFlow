@@ -4,6 +4,7 @@ using IssueFlow.Domain.Profiles;
 using IssueFlow.Domain.Projects;
 using IssueFlow.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace IssueFlow.Infrastructure.Persistence;
 
@@ -134,6 +135,30 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
         );
     }
 
+    private void SeedRoles(ModelBuilder builder)
+    {
+        var roles = new Dictionary<string, string>
+        {
+            ["Admin"] = "50604dfe-6337-4583-80a3-eeb97833ebf7",
+            ["ProjectManager"] = "75079277-1507-4da0-8794-009c7efd8db1",
+            ["Developer"] = "0411f1d5-e108-457d-be8f-eee19f45af0b",
+            ["Tester"] = "e5db8e97-e573-44e5-bd65-95f69a04fabc",
+            ["Viewer"] = "d3b5f4c2-8f4e-4c3a-9f7e-2b6d5f4c2a1b",
+            ["Reporter"] = "a1b2c3d4-e5f6-7890-abcd-ef0123456789",
+            ["Support"] = "12345678-90ab-cdef-1234-567890abcdef"
+        };
+
+        var identityRoles = roles.Select(role => new IdentityRole
+        {
+            Id = role.Value,
+            ConcurrencyStamp = role.Value,
+            Name = role.Key,
+            NormalizedName = role.Key.ToUpper()
+        }).ToList();
+
+        builder.Entity<IdentityRole>().HasData(identityRoles);
+    }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -179,5 +204,6 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
 
         // Seed initial data
         SeedDatabase(builder);
+        SeedRoles(builder);
     }
 }

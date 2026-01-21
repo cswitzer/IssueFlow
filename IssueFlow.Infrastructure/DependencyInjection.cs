@@ -14,9 +14,10 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
-        string connectionString,
         IConfiguration configuration)
     {
+        var connectionString = configuration.GetConnectionString("DefaultConnection") 
+            ?? throw new InvalidOperationException("Database connection string is not configured.");
         services.AddDbContext<IssueFlowDbContext>(options => options.UseSqlServer(connectionString));
 
         // Add other services in the future like:

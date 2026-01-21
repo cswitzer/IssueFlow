@@ -3,9 +3,7 @@ using IssueFlow.Infrastructure;
 var builder = WebApplication.CreateBuilder(args);
 
 // AddInfrastructure is defined in IssueFlow.Infrastructure.DependencyInjection.cs
-builder.Services.AddInfrastructure(
-    builder.Configuration.GetConnectionString("DefaultConnection")
-);
+builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
