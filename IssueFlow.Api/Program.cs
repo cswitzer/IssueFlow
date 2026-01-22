@@ -21,6 +21,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+//TODO: Create AuthController and login and register users
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

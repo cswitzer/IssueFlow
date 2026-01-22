@@ -1,4 +1,5 @@
-﻿using IssueFlow.Infrastructure.Identity;
+﻿using IssueFlow.Application.Auth;
+using IssueFlow.Infrastructure.Identity;
 using IssueFlow.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -55,6 +56,9 @@ public static class DependencyInjection
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
                 };
             });
+
+        services.AddScoped<IJwtTokenService, JwtTokenService>();
+        services.AddScoped<IAuthService, IdentityAuthService>();
 
         return services;
     }

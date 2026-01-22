@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IssueFlow.Application\IssueFlow.Application.csproj" />
     <ProjectReference Include="..\IssueFlow.Domain\IssueFlow.Domain.csproj" />
   </ItemGroup>
 
