@@ -1,0 +1,8 @@
+﻿I decided to use repositories for 4 reasons:
+
+1. Repositories are easier to work with in unit tests. Mocking a repository is more straightforward than mocking a DbContext, which can be complex and cumbersome.
+2. Repositories provide a layer of abstraction between the application and the data access layer. This abstraction allows for easier changes to the data access implementation in the future without affecting the rest of the application.
+3. Repositories can encapsulate common data access patterns and logic, promoting code reuse and reducing duplication across the application.
+4. Repositories prevent the application layer from having access to everything in the database via DbContext. Each service should only have access to the data it needs, which enhances security and maintainability.
+
+I understand that DbContext is already a unit of work and that using repositories introduces additional layes, complexity, and boilerplate code. However, I believe that the benefits mentioned above outweigh these drawbacks in this particular application.

@@ -1,5 +1,5 @@
 ﻿namespace IssueFlow.Application.Projects;
 
-internal class IProjectService
+public interface IProjectService
 {
 }

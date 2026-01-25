@@ -1,5 +1,5 @@
 ﻿namespace IssueFlow.Application.Issues;
 
-internal class IIssueService
+public interface IIssueService
 {
 }

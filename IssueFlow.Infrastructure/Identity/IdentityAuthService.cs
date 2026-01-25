@@ -50,6 +50,7 @@ public class IdentityAuthService : IAuthService
             return new AuthResult
             {
                 Success = true,
+                UserId = user.Id,
                 Errors = new List<string>(),
                 AccessToken = token
             };
@@ -89,6 +90,7 @@ public class IdentityAuthService : IAuthService
             return new AuthResult
             {
                 Success = true,
+                UserId = newUser.Id,
                 Errors = new List<string>(),
                 AccessToken = token
             };

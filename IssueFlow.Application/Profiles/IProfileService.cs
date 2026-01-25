@@ -1,5 +1,9 @@
 ﻿namespace IssueFlow.Application.Profiles;
 
-internal class IProfileService
+public interface IProfileService
 {
+    Task<ProfileDto> CreateProfileAsync(CreateProfileDto createProfileDto);
+    Task<ProfileDto?> DeactivateProfileAsync(string userId);
+    Task<ProfileDto?> GetProfileAsync(string userId);
+    Task<ProfileDto> UpdateProfileAsync(UpdateProfileDto updateProfileDto);
 }

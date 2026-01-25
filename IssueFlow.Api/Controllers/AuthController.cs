@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using IssueFlow.Application.Auth;
+using IssueFlow.Application.Profiles;
+using Microsoft.AspNetCore.Mvc;
 
 namespace IssueFlow.Api.Controllers;
 
@@ -6,4 +8,32 @@ namespace IssueFlow.Api.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
+    private readonly IAuthService _authService;
+    private readonly IProfileService _profileService;
+
+    public AuthController(IAuthService authService, IProfileService profileService)
+    {
+        _authService = authService;
+        _profileService = profileService;
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterRequest registerRequest)
+    {
+        var authResult = await _authService.RegisterUser(registerRequest);
+        if (!authResult.Success)
+        {
+            return BadRequest(authResult.Errors);
+        }
+
+        var createProfileData = new CreateProfileDto
+        {
+            UserId = authResult.UserId!,
+            FirstName = registerRequest.FirstName,
+            LastName = registerRequest.LastName,
+        };
+        await _profileService.CreateProfileAsync(createProfileData);
+
+        return Ok(authResult);
+    }
 }

@@ -1,5 +1,5 @@
 ﻿namespace IssueFlow.Application.Users;
 
-internal class IUserService
+public interface IUserService
 {
 }
