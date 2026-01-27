@@ -1,4 +1,6 @@
-﻿namespace IssueFlow.Application.Profiles;
+﻿using IssueFlow.Application.Profiles.Dtos;
+
+namespace IssueFlow.Application.Profiles;
 
 public interface IProfileService
 {

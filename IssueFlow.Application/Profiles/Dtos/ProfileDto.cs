@@ -1,4 +1,4 @@
-﻿namespace IssueFlow.Application.Profiles;
+﻿namespace IssueFlow.Application.Profiles.Dtos;
 
 public class ProfileDto
 {

@@ -1,10 +1,9 @@
-﻿namespace IssueFlow.Application.Profiles;
+﻿using IssueFlow.Application.Profiles.Dtos;
+
+namespace IssueFlow.Application.Profiles;
 
 public class ProfileService : IProfileService
 {
-    // TODO create an interface here and implement it in the Infrastructure layer
-    // for db access
-
     public Task<ProfileDto> CreateProfileAsync(CreateProfileDto createProfileDto)
     {
         throw new NotImplementedException();
