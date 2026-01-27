@@ -1,5 +1,6 @@
 ﻿using IssueFlow.Application.Auth;
 using IssueFlow.Application.Profiles;
+using IssueFlow.Application.Profiles.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IssueFlow.Api.Controllers;
