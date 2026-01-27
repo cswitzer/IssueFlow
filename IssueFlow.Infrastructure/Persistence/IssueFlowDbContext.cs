@@ -23,7 +23,7 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
 
     private void SeedDatabase(ModelBuilder builder)
     {
-        var now = DateTime.UtcNow;
+        var createdAt = new DateTime(2026, 1, 26, 0, 0, 0, DateTimeKind.Utc);
 
         // add a range of issue priorities
         builder.Entity<IssuePriority>().HasData(
@@ -32,7 +32,7 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
                 Name = "Low", 
                 Description = "Low priority tasks and small bug fixes",
                 SortOrder = 1,
-                CreatedAt = now
+                CreatedAt = createdAt
             },
             new IssuePriority
             { 
@@ -40,7 +40,7 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
                 Name = "Medium", 
                 Description = "Tasks and issues that take precendence over Low, but not High",
                 SortOrder = 2,
-                CreatedAt = now
+                CreatedAt = createdAt
             },
             new IssuePriority
             { 
@@ -48,7 +48,7 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
                 Name = "High", 
                 Description = "Critical tasks and blockers that need immediate attention",
                 SortOrder = 3,
-                CreatedAt = now
+                CreatedAt = createdAt
             }
         );
 
@@ -59,7 +59,7 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
                 Description = "Issues that are yet to be started",
                 IsFinal = false,
                 SortOrder = 1,
-                CreatedAt = now
+                CreatedAt = createdAt
             },
             new IssueStatus
             {
@@ -68,7 +68,7 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
                 Description = "Issues that are currently being worked on",
                 IsFinal = false,
                 SortOrder = 2,
-                CreatedAt = now
+                CreatedAt = createdAt
             },
             new IssueStatus
             {
@@ -77,7 +77,7 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
                 Description = "Issues that are blocked and cannot proceed",
                 IsFinal = false,
                 SortOrder = 3,
-                CreatedAt = now
+                CreatedAt = createdAt
             },
             new IssueStatus
             {
@@ -86,7 +86,7 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
                 Description = "Issues that have been completed",
                 IsFinal = true,
                 SortOrder = 4,
-                CreatedAt = now
+                CreatedAt = createdAt
             },
             new IssueStatus 
             {
@@ -95,7 +95,7 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
                 Description = "Issues that are no longer active for any reason",
                 IsFinal = true,
                 SortOrder = 5,
-                CreatedAt = now
+                CreatedAt = createdAt
             }
         );
 
@@ -106,7 +106,7 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
                 Name = "Bug",
                 Description = "A problem which impairs or prevents the functions of the product",
                 SortOrder = 1,
-                CreatedAt = now
+                CreatedAt = createdAt
             },
             new IssueType
             {
@@ -114,7 +114,7 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
                 Name = "Task",
                 Description = "A general task that needs to be accomplished",
                 SortOrder = 2,
-                CreatedAt = now
+                CreatedAt = createdAt
             },
             new IssueType
             {
@@ -122,7 +122,7 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
                 Name = "Story",
                 Description = "A user story that describes a feature from the end-user perspective",
                 SortOrder = 3,
-                CreatedAt = now
+                CreatedAt = createdAt
             },
             new IssueType
             {
@@ -130,7 +130,7 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
                 Name = "Epic",
                 Description = "A large body of work that can be broken down into smaller tasks or stories",
                 SortOrder = 4,
-                CreatedAt = now
+                CreatedAt = createdAt
             }
         );
     }

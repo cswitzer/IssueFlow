@@ -4,6 +4,7 @@ using IssueFlow.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IssueFlow.Infrastructure.Migrations
 {
     [DbContext(typeof(IssueFlowDbContext))]
-    partial class IssueFlowDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260127020734_ChangeIssueSummaryToTitle")]
+    partial class ChangeIssueSummaryToTitle
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,7 +105,7 @@ namespace IssueFlow.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("11111111-1111-1111-1111-111111111111"),
-                            CreatedAt = new DateTime(2026, 1, 26, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 27, 2, 7, 34, 311, DateTimeKind.Utc).AddTicks(5326),
                             Description = "Low priority tasks and small bug fixes",
                             Name = "Low",
                             SortOrder = 1
@@ -110,7 +113,7 @@ namespace IssueFlow.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("22222222-2222-2222-2222-222222222222"),
-                            CreatedAt = new DateTime(2026, 1, 26, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 27, 2, 7, 34, 311, DateTimeKind.Utc).AddTicks(5326),
                             Description = "Tasks and issues that take precendence over Low, but not High",
                             Name = "Medium",
                             SortOrder = 2
@@ -118,7 +121,7 @@ namespace IssueFlow.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("33333333-3333-3333-3333-333333333333"),
-                            CreatedAt = new DateTime(2026, 1, 26, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 27, 2, 7, 34, 311, DateTimeKind.Utc).AddTicks(5326),
                             Description = "Critical tasks and blockers that need immediate attention",
                             Name = "High",
                             SortOrder = 3
@@ -158,7 +161,7 @@ namespace IssueFlow.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"),
-                            CreatedAt = new DateTime(2026, 1, 26, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 27, 2, 7, 34, 311, DateTimeKind.Utc).AddTicks(5326),
                             Description = "Issues that are yet to be started",
                             IsFinal = false,
                             Name = "To Do",
@@ -167,7 +170,7 @@ namespace IssueFlow.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb"),
-                            CreatedAt = new DateTime(2026, 1, 26, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 27, 2, 7, 34, 311, DateTimeKind.Utc).AddTicks(5326),
                             Description = "Issues that are currently being worked on",
                             IsFinal = false,
                             Name = "In Progress",
@@ -176,7 +179,7 @@ namespace IssueFlow.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("dddddddd-dddd-dddd-dddd-dddddddddddd"),
-                            CreatedAt = new DateTime(2026, 1, 26, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 27, 2, 7, 34, 311, DateTimeKind.Utc).AddTicks(5326),
                             Description = "Issues that are blocked and cannot proceed",
                             IsFinal = false,
                             Name = "Blocked",
@@ -185,7 +188,7 @@ namespace IssueFlow.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("cccccccc-cccc-cccc-cccc-cccccccccccc"),
-                            CreatedAt = new DateTime(2026, 1, 26, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 27, 2, 7, 34, 311, DateTimeKind.Utc).AddTicks(5326),
                             Description = "Issues that have been completed",
                             IsFinal = true,
                             Name = "Done",
@@ -194,7 +197,7 @@ namespace IssueFlow.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee"),
-                            CreatedAt = new DateTime(2026, 1, 26, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 27, 2, 7, 34, 311, DateTimeKind.Utc).AddTicks(5326),
                             Description = "Issues that are no longer active for any reason",
                             IsFinal = true,
                             Name = "Resolved",
@@ -235,7 +238,7 @@ namespace IssueFlow.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("55555555-5555-5555-5555-555555555555"),
-                            CreatedAt = new DateTime(2026, 1, 26, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 27, 2, 7, 34, 311, DateTimeKind.Utc).AddTicks(5326),
                             Description = "A problem which impairs or prevents the functions of the product",
                             Name = "Bug",
                             SortOrder = 1
@@ -243,7 +246,7 @@ namespace IssueFlow.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("66666666-6666-6666-6666-666666666666"),
-                            CreatedAt = new DateTime(2026, 1, 26, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 27, 2, 7, 34, 311, DateTimeKind.Utc).AddTicks(5326),
                             Description = "A general task that needs to be accomplished",
                             Name = "Task",
                             SortOrder = 2
@@ -251,7 +254,7 @@ namespace IssueFlow.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("44444444-4444-4444-4444-444444444444"),
-                            CreatedAt = new DateTime(2026, 1, 26, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 27, 2, 7, 34, 311, DateTimeKind.Utc).AddTicks(5326),
                             Description = "A user story that describes a feature from the end-user perspective",
                             Name = "Story",
                             SortOrder = 3
@@ -259,7 +262,7 @@ namespace IssueFlow.Infrastructure.Migrations
                         new
                         {
                             Id = new Guid("77777777-7777-7777-7777-777777777777"),
-                            CreatedAt = new DateTime(2026, 1, 26, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2026, 1, 27, 2, 7, 34, 311, DateTimeKind.Utc).AddTicks(5326),
                             Description = "A large body of work that can be broken down into smaller tasks or stories",
                             Name = "Epic",
                             SortOrder = 4

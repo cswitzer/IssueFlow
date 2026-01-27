@@ -10,7 +10,7 @@ public class Issue : Entity
     public Guid IssueStatusId { get; set; }
     public Guid IssuePriorityId { get; set; }
 
-    public required string Summary { get; set; }
+    public required string Title { get; set; }
     public string Description { get; set; } = string.Empty;
     public required string Key { get; set; } // Pattern [Project.Key]-[IssueNumber]
 
