@@ -1,5 +1,4 @@
-﻿using IssueFlow.Application.Issues;
-using IssueFlow.Application.Issues.Dtos;
+﻿using IssueFlow.Application.Issues.Dtos;
 using IssueFlow.Application.Repositories;
 using IssueFlow.Domain.Issues;
 using IssueFlow.Infrastructure.Persistence;
