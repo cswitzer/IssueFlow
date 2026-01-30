@@ -55,9 +55,11 @@ internal class ProfileRepository : IProfileRepository
         };
     }
 
-    public async Task<IReadOnlyList<ReadProfileDto>> ReadAllProfilesAsync()
+    public async Task<IReadOnlyList<ReadProfileDto>> ReadAllProfilesAsync(int page = 1, int pageSize = 15)
     {
         return await _dbContext.Profiles
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .Select(p => new ReadProfileDto
             {
                 Id = p.Id,
