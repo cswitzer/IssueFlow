@@ -6,6 +6,7 @@ using IssueFlow.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using IssueFlow.Domain.Organizations;
+using IssueFlow.Domain.Joins;
 
 namespace IssueFlow.Infrastructure.Persistence;
 
@@ -17,6 +18,7 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
 
     public DbSet<Profile> Profiles { get; set; }
     public DbSet<Organization> Organizations { get; set; }
+    public DbSet<OrganizationMember> OrganizationMembers { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<Issue> Issues { get; set; }
     public DbSet<IssueType> IssueTypes { get; set; }
@@ -164,6 +166,32 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.Entity<Organization>()
+            .HasIndex(o => o.Name)
+            .IsUnique();
+
+        // Configure m2m between Organization and Profile via OrganizationMember
+        builder.Entity<OrganizationMember>()
+            .HasKey(om => new { om.OrganizationId, om.ProfileId });
+
+        builder.Entity<OrganizationMember>()
+            .HasOne(om => om.Organization)
+            .WithMany(o => o.Members)
+            .HasForeignKey(om => om.OrganizationId);
+
+        builder.Entity<OrganizationMember>()
+            .HasOne(om => om.Profile)
+            .WithMany(p => p.Organizations)
+            .HasForeignKey(om => om.ProfileId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Deleting an organization should delete all its projects
+        builder.Entity<Project>()
+            .HasOne(o => o.Organization)
+            .WithMany(o => o.Projects)
+            .HasForeignKey(o => o.OrganizationId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         // Deleting a profile should NOT delete an entire project
         builder.Entity<Project>()

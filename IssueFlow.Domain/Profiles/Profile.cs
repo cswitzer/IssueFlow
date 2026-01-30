@@ -1,4 +1,6 @@
 ﻿using IssueFlow.Domain.Base;
+using IssueFlow.Domain.Joins;
+using IssueFlow.Domain.Organizations;
 using IssueFlow.Domain.Projects;
 
 namespace IssueFlow.Domain.Profiles;
@@ -12,4 +14,5 @@ public class Profile : Entity
 
     // navigation properties
     public ICollection<Project> OwnedProjects { get; set; } = new List<Project>();
+    public ICollection<OrganizationMember> Organizations { get; set; } = new List<OrganizationMember>();
 }
