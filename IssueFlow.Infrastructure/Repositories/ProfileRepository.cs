@@ -126,26 +126,76 @@ internal class ProfileRepository : IProfileRepository
 
     public async Task<ReadProfileDto?> UpdateProfileAsync(Guid id, UpdateProfileDto updateProfileDto)
     {
-        var profile = await _dbContext.Profiles
-            .Where(p => p.Id == id)
-            .FirstOrDefaultAsync();
-        if (profile is null)
-            return null;
+        using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
-        if (updateProfileDto.FirstName is not null)
-            profile.FirstName = updateProfileDto.FirstName;
-        if (updateProfileDto.LastName is not null)
-            profile.LastName = updateProfileDto.LastName;
-        if (updateProfileDto.ProfilePictureUrl is not null)
-            profile.ProfilePictureUrl = updateProfileDto.ProfilePictureUrl;
-
-        await _dbContext.SaveChangesAsync();
-        return new ReadProfileDto
+        try
         {
-            Id = profile.Id,
-            DisplayName = $"{profile.FirstName} {profile.LastName}",
-            ProfilePictureUrl = profile.ProfilePictureUrl,
-            CreatedAt = profile.CreatedAt
-        };
+            var profile = await _dbContext.Profiles
+                .Where(p => p.Id == id)
+                .FirstOrDefaultAsync();
+            if (profile is null)
+                return null;
+
+            if (updateProfileDto.FirstName is not null)
+                profile.FirstName = updateProfileDto.FirstName;
+            if (updateProfileDto.LastName is not null)
+                profile.LastName = updateProfileDto.LastName;
+            if (updateProfileDto.ProfilePictureUrl is not null)
+                profile.ProfilePictureUrl = updateProfileDto.ProfilePictureUrl;
+
+            // Handle organization memberships update
+            if (updateProfileDto.OrganizationIds is not null)
+            {
+                var existingOrgIds = await _dbContext.Organizations
+                    .Where(o => updateProfileDto.OrganizationIds.Contains(o.Id))
+                    .Select(o => o.Id)
+                    .ToListAsync();
+
+                var invalidOrgIds = updateProfileDto.OrganizationIds.Except(existingOrgIds).ToList();
+                if (invalidOrgIds.Any())
+                {
+                    throw new ArgumentException($"The following organization IDs do not exist: {string.Join(", ", invalidOrgIds)}");
+                }
+
+                var currentMemberships = await _dbContext.OrganizationMembers
+                    .Where(m => m.ProfileId == profile.Id)
+                    .ToListAsync();
+                var currentOrgIds = currentMemberships.Select(m => m.OrganizationId).ToList();
+
+                var membershipsToRemove = currentMemberships
+                    .Where(m => !updateProfileDto.OrganizationIds.Contains(m.OrganizationId))
+                    .ToList();
+                _dbContext.OrganizationMembers.RemoveRange(membershipsToRemove);
+
+                var orgIdsToAdd = updateProfileDto.OrganizationIds
+                    .Where(orgId => !currentOrgIds.Contains(orgId))
+                    .ToList();
+
+                foreach (var orgId in orgIdsToAdd)
+                {
+                    await _dbContext.OrganizationMembers.AddAsync(new OrganizationMember
+                    {
+                        ProfileId = profile.Id,
+                        OrganizationId = orgId
+                    });
+                }
+            }
+
+            await _dbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            return new ReadProfileDto
+            {
+                Id = profile.Id,
+                DisplayName = $"{profile.FirstName} {profile.LastName}",
+                ProfilePictureUrl = profile.ProfilePictureUrl,
+                CreatedAt = profile.CreatedAt
+            };
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
 }
