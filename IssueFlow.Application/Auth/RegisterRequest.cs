@@ -11,4 +11,5 @@ public class RegisterRequest
     // For setting profile information
     public required string FirstName { get; set; }
     public required string LastName { get; set; }
+    public List<Guid>? OrganizationIds { get; set; } = new List<Guid>();
 }

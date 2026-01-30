@@ -32,6 +32,7 @@ public class AuthController : ControllerBase
             UserId = authResult.UserId!,
             FirstName = registerRequest.FirstName,
             LastName = registerRequest.LastName,
+            OrganizationIds = registerRequest.OrganizationIds
         };
         await _profileService.CreateProfileAsync(createProfileData);
 
