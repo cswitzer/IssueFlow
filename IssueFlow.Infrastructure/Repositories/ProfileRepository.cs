@@ -1,5 +1,6 @@
 ﻿using IssueFlow.Application.Profiles.Dtos;
 using IssueFlow.Application.Repositories;
+using IssueFlow.Domain.Joins;
 using IssueFlow.Domain.Profiles;
 using IssueFlow.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -17,24 +18,61 @@ internal class ProfileRepository : IProfileRepository
 
     public async Task<ReadProfileDto> CreateProfileAsync(CreateProfileDto createProfileDto)
     {
-        var profile = new Profile
-        {
-            UserId = createProfileDto.UserId,
-            FirstName = createProfileDto.FirstName,
-            LastName = createProfileDto.LastName,
-            ProfilePictureUrl = createProfileDto.ProfilePictureUrl
-        };
+        using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
-        _dbContext.Profiles.Add(profile);
-        await _dbContext.SaveChangesAsync();
-
-        return new ReadProfileDto
+        try
         {
-            Id = profile.Id,
-            DisplayName = $"{profile.FirstName} {profile.LastName}",
-            ProfilePictureUrl = profile.ProfilePictureUrl,
-            CreatedAt = profile.CreatedAt
-        };
+            var profile = new Profile
+            {
+                UserId = createProfileDto.UserId,
+                FirstName = createProfileDto.FirstName,
+                LastName = createProfileDto.LastName,
+                ProfilePictureUrl = createProfileDto.ProfilePictureUrl
+            };
+
+            _dbContext.Profiles.Add(profile);
+            await _dbContext.SaveChangesAsync();
+
+            // Add organization memberships if provided
+            if (createProfileDto.OrganizationIds is not null)
+            {
+                var existingOrgIds = await _dbContext.Organizations
+                    .Where(o => createProfileDto.OrganizationIds.Contains(o.Id))
+                    .Select(o => o.Id)
+                    .ToListAsync();
+
+                var invalidOrgIds = createProfileDto.OrganizationIds.Except(existingOrgIds).ToList();
+                if (invalidOrgIds.Any())
+                {
+                    throw new ArgumentException($"The following organization IDs do not exist: {string.Join(", ", invalidOrgIds)}");
+                }
+
+                foreach (var orgId in createProfileDto.OrganizationIds)
+                {
+                    await _dbContext.OrganizationMembers.AddAsync(new OrganizationMember
+                    {
+                        ProfileId = profile.Id,
+                        OrganizationId = orgId
+                    });
+                }
+                await _dbContext.SaveChangesAsync();
+            }
+
+            await transaction.CommitAsync();
+
+            return new ReadProfileDto
+            {
+                Id = profile.Id,
+                DisplayName = $"{profile.FirstName} {profile.LastName}",
+                ProfilePictureUrl = profile.ProfilePictureUrl,
+                CreatedAt = profile.CreatedAt
+            };
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
 
     public async Task<ReadProfileDto?> DeleteProfileAsync(Guid id)
