@@ -1,16 +1,24 @@
 ﻿using IssueFlow.Application.Issues.Dtos;
+using IssueFlow.Application.Repositories;
 
 namespace IssueFlow.Application.Issues;
 
 public class IssueTypeService : IIssueTypeService
 {
-    public Task<IReadOnlyList<ReadIssueTypeDto>> GetAllIssueTypesAsync()
+    private readonly IIssueTypeRepository _issueTypeRepository;
+
+    public IssueTypeService(IIssueTypeRepository issueTypeRepository)
     {
-        throw new NotImplementedException();
+        _issueTypeRepository = issueTypeRepository;
     }
 
-    public Task<ReadIssueTypeDto?> GetIssueTypeAsync(Guid id)
+    public async Task<IReadOnlyList<ReadIssueTypeDto>> GetAllIssueTypesAsync()
     {
-        throw new NotImplementedException();
+        return await _issueTypeRepository.ReadAllIssueTypesAsync();
+    }
+
+    public async Task<ReadIssueTypeDto?> GetIssueTypeAsync(Guid id)
+    {
+        return await _issueTypeRepository.ReadIssueTypeAsync(id);
     }
 }

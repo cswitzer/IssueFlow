@@ -1,31 +1,39 @@
 ﻿using IssueFlow.Application.Issues.Dtos;
+using IssueFlow.Application.Repositories;
 
 namespace IssueFlow.Application.Issues;
 
 public class IssueService : IIssueService
 {
-    public Task<ReadIssueDto> CreateIssueAsync(CreateIssueDto createIssueDto)
+    private readonly IIssueRepository _issueRepository;
+
+    public IssueService(IIssueRepository issueRepository)
     {
-        throw new NotImplementedException();
+        _issueRepository = issueRepository;
     }
 
-    public Task<ReadIssueDto?> DeleteIssueAsync(Guid id)
+    public async Task<ReadIssueDto> CreateIssueAsync(CreateIssueDto createIssueDto)
     {
-        throw new NotImplementedException();
+        return await _issueRepository.CreateIssueAsync(createIssueDto);
     }
 
-    public Task<ReadIssueDto?> GetIssueAsync(Guid id)
+    public async Task<ReadIssueDto?> DeleteIssueAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await _issueRepository.DeleteIssueAsync(id);
     }
 
-    public Task<IReadOnlyList<ReadIssueDto>> GetIssuesByProjectAsync(Guid projectId, int page = 1, int pageSize = 15)
+    public async Task<ReadIssueDto?> GetIssueAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await _issueRepository.ReadIssueAsync(id);
     }
 
-    public Task<ReadIssueDto?> UpdateIssueAsync(Guid id, UpdateIssueDto updateIssueDto)
+    public async Task<IReadOnlyList<ReadIssueDto>> GetIssuesByProjectAsync(Guid projectId, int page = 1, int pageSize = 15)
     {
-        throw new NotImplementedException();
+        return await _issueRepository.ReadIssuesByProjectAsync(projectId, page: page, pageSize: pageSize);
+    }
+
+    public async Task<ReadIssueDto?> UpdateIssueAsync(Guid id, UpdateIssueDto updateIssueDto)
+    {
+        return await _issueRepository.UpdateIssueAsync(id, updateIssueDto);
     }
 }

@@ -1,21 +1,39 @@
 ﻿using IssueFlow.Application.Profiles.Dtos;
+using IssueFlow.Application.Repositories;
 
 namespace IssueFlow.Application.Profiles;
 
 public class ProfileService : IProfileService
 {
-    public Task<ProfileDto> CreateProfileAsync(CreateProfileDto createProfileDto)
+    private readonly IProfileRepository _profileRepository;
+
+    public ProfileService(IProfileRepository profileRepository)
     {
-        throw new NotImplementedException();
+        _profileRepository = profileRepository;
     }
 
-    public Task<ProfileDto?> GetProfileAsync(string userId)
+    public async Task<ReadProfileDto> CreateProfileAsync(CreateProfileDto createProfileDto)
     {
-        throw new NotImplementedException();
+        return await _profileRepository.CreateProfileAsync(createProfileDto);
     }
 
-    public Task<ProfileDto> UpdateProfileAsync(UpdateProfileDto updateProfileDto)
+    public async Task<ReadProfileDto?> DeleteProfileAsync(Guid id)
     {
-        throw new NotImplementedException();
+        return await _profileRepository.DeleteProfileAsync(id);
+    }
+
+    public async Task<IReadOnlyList<ReadProfileDto>> GetAllProfilesAsync()
+    {
+        return await _profileRepository.ReadAllProfilesAsync();
+    }
+
+    public async Task<ReadProfileDto?> GetProfileAsync(Guid id)
+    {
+        return await _profileRepository.ReadProfileAsync(id);
+    }
+
+    public async Task<ReadProfileDto?> UpdateProfileAsync(Guid id, UpdateProfileDto updateProfileDto)
+    {
+        return await _profileRepository.UpdateProfileAsync(id, updateProfileDto);
     }
 }
