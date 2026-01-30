@@ -9,11 +9,6 @@ public class ProfileService : IProfileService
         throw new NotImplementedException();
     }
 
-    public Task<ProfileDto?> DeactivateProfileAsync(string userId)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<ProfileDto?> GetProfileAsync(string userId)
     {
         throw new NotImplementedException();

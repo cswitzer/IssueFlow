@@ -12,7 +12,8 @@ public class Issue : Entity
 
     public required string Title { get; set; }
     public string Description { get; set; } = string.Empty;
-    public required string Key { get; set; } // Pattern [Project.Key]-[IssueNumber]
+    public required string Key { get; init; } // Pattern [Project.Key]-[IssueNumber]
+    public required int IssueNumber { get; init; } // Sequential number within the project
 
     // Navigation properties (optional)
     public Project? Project { get; set; }
