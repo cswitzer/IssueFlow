@@ -5,6 +5,7 @@ using IssueFlow.Domain.Projects;
 using IssueFlow.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using IssueFlow.Domain.Organizations;
 
 namespace IssueFlow.Infrastructure.Persistence;
 
@@ -15,6 +16,7 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
     }
 
     public DbSet<Profile> Profiles { get; set; }
+    public DbSet<Organization> Organizations { get; set; }
     public DbSet<Project> Projects { get; set; }
     public DbSet<Issue> Issues { get; set; }
     public DbSet<IssueType> IssueTypes { get; set; }
