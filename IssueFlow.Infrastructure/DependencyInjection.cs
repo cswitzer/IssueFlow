@@ -1,6 +1,12 @@
 ﻿using IssueFlow.Application.Auth;
+using IssueFlow.Application.Issues;
+using IssueFlow.Application.Organizations;
+using IssueFlow.Application.Profiles;
+using IssueFlow.Application.Projects;
+using IssueFlow.Application.Repositories;
 using IssueFlow.Infrastructure.Identity;
 using IssueFlow.Infrastructure.Persistence;
+using IssueFlow.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -57,8 +63,27 @@ public static class DependencyInjection
                 };
             });
 
+        // Auth Services
         services.AddScoped<IJwtTokenService, JwtTokenService>();
         services.AddScoped<IAuthService, IdentityAuthService>();
+
+        // Repositories
+        services.AddScoped<IIssueRepository, IssueRepository>();
+        services.AddScoped<IIssuePriorityRepository, IssuePriorityRepository>();
+        services.AddScoped<IIssueStatusRepository, IssueStatusRepository>();
+        services.AddScoped<IIssueTypeRepository, IssueTypeRepository>();
+        services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+        services.AddScoped<IProfileRepository, ProfileRepository>();
+        services.AddScoped<IProjectRepository, ProjectRepository>();
+
+        // Services
+        services.AddScoped<IIssueService, IssueService>();
+        services.AddScoped<IIssuePriorityService, IssuePriorityService>();
+        services.AddScoped<IIssueStatusService, IssueStatusService>();
+        services.AddScoped<IIssueTypeService, IssueTypeService>();
+        services.AddScoped<IOrganizationService, OrganizationService>();
+        services.AddScoped<IProfileService, ProfileService>();
+        services.AddScoped<IProjectService, ProjectService>();
 
         return services;
     }
