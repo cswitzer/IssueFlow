@@ -124,6 +124,22 @@ internal class ProfileRepository : IProfileRepository
         };
     }
 
+    public async Task<IReadOnlyList<ReadProfileDto>> ReadProfilesByOrganization(Guid organizationId, int page = 1, int pageSize = 15)
+    {
+        // if any organization members for a profile match the organizationId, include that profile
+        return await _dbContext.Profiles
+            .Where(p => p.OrganizationMembers.Any(om => om.OrganizationId == organizationId))
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(p => new ReadProfileDto
+            {
+                Id = p.Id,
+                DisplayName = $"{p.FirstName} {p.LastName}",
+                ProfilePictureUrl = p.ProfilePictureUrl,
+                CreatedAt = p.CreatedAt
+            }).ToListAsync();
+    }
+
     public async Task<ReadProfileDto?> UpdateProfileAsync(Guid id, UpdateProfileDto updateProfileDto)
     {
         using var transaction = await _dbContext.Database.BeginTransactionAsync();

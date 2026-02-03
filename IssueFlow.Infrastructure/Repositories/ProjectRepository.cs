@@ -130,4 +130,21 @@ internal class ProjectRepository : IProjectRepository
             CreatedAt = project.CreatedAt
         };
     }
+
+    public async Task<IReadOnlyList<ReadProjectDto>> ReadProjectsByOrganization(Guid organizationId, int page = 1, int pageSize = 15)
+    {
+        return await _dbContext.Projects
+            .Where(p => p.OrganizationId == organizationId)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .Select(p => new ReadProjectDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                OwnerProfileId = p.OwnerProfileId,
+                CreatedAt = p.CreatedAt
+            })
+            .ToListAsync();
+    }
 }

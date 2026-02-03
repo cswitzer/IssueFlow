@@ -177,12 +177,12 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
 
         builder.Entity<OrganizationMember>()
             .HasOne(om => om.Organization)
-            .WithMany(o => o.Members)
+            .WithMany(o => o.OrganizationMembers)
             .HasForeignKey(om => om.OrganizationId);
 
         builder.Entity<OrganizationMember>()
             .HasOne(om => om.Profile)
-            .WithMany(p => p.Organizations)
+            .WithMany(p => p.OrganizationMembers)
             .HasForeignKey(om => om.ProfileId)
             .OnDelete(DeleteBehavior.Restrict);
 

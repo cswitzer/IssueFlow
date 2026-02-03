@@ -14,5 +14,5 @@ public class Profile : Entity
 
     // navigation properties
     public ICollection<Project> OwnedProjects { get; set; } = new List<Project>();
-    public ICollection<OrganizationMember> Organizations { get; set; } = new List<OrganizationMember>();
+    public ICollection<OrganizationMember> OrganizationMembers { get; set; } = new List<OrganizationMember>();
 }

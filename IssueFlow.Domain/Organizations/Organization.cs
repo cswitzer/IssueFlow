@@ -14,5 +14,5 @@ public class Organization : Entity
     // Navigation Properties
     public Profile OwnerProfile { get; set; }
     public ICollection<Project> Projects { get; set; } = new List<Project>();
-    public ICollection<OrganizationMember> Members { get; set; } = new List<OrganizationMember>();
+    public ICollection<OrganizationMember> OrganizationMembers { get; set; } = new List<OrganizationMember>();
 }
