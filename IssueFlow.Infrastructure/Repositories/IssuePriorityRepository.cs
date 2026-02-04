@@ -21,7 +21,8 @@ internal class IssuePriorityRepository : IIssuePriorityRepository
             {
                 Id = ip.Id,
                 Name = ip.Name,
-                Description = ip.Description
+                Description = ip.Description,
+                SortOrder = ip.SortOrder
             }).ToListAsync();
     }
 
@@ -33,7 +34,8 @@ internal class IssuePriorityRepository : IIssuePriorityRepository
             {
                 Id = ip.Id,
                 Name = ip.Name,
-                Description = ip.Description
+                Description = ip.Description,
+                SortOrder = ip.SortOrder
             }).FirstOrDefaultAsync();
     }
 }
