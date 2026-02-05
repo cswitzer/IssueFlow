@@ -29,18 +29,18 @@ public class JwtTokenService : IJwtTokenService
         foreach (var role in jwtUserDto.Roles)
             claims.Add(new Claim(ClaimTypes.Role, role));
 
-        var secretKey = _configuration["Jwt:SecretKey"]
+        var secretKey = _configuration["JwtSettings:SecretKey"]
             ?? throw new InvalidOperationException("JWT secret key is not configured.");
         var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
         var credentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
 
-        var expiryHours = _configuration.GetValue<int>("Jwt:ExpiryHours");
+        var expiryHours = _configuration.GetValue<int>("JwtSettings:ExpiryHours");
         if (expiryHours <= 0)
             throw new InvalidOperationException("JWT expiry hours is either not configured or set to an invalid value.");
 
         var token = new JwtSecurityToken(
-            issuer: _configuration["Jwt:Issuer"],
-            audience: _configuration["Jwt:Audience"],
+            issuer: _configuration["JwtSettings:Issuer"],
+            audience: _configuration["JwtSettings:Audience"],
             claims: claims,
             expires: DateTime.UtcNow.AddHours(expiryHours),
             signingCredentials: credentials);
