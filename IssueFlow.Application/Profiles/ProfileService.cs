@@ -22,6 +22,11 @@ public class ProfileService : IProfileService
         return await _profileRepository.DeleteProfileAsync(id);
     }
 
+    public async Task<IReadOnlyList<ReadProfileDto>> GetProfilesByOrganization(Guid organizationId, int page = 1, int pageSize = 15)
+    {
+        return await _profileRepository.ReadProfilesByOrganization(organizationId, page, pageSize);
+    }
+
     public async Task<IReadOnlyList<ReadProfileDto>> GetAllProfilesAsync(int page = 1, int pageSize = 15)
     {
         return await _profileRepository.ReadAllProfilesAsync(page, pageSize);

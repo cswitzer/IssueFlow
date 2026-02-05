@@ -17,21 +17,16 @@ namespace IssueFlow.Api.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ReadIssuePriorityDto>> GetIssuePriority([FromRoute] Guid id)
+        public async Task<IActionResult> GetIssuePriority([FromRoute] Guid id)
         {
             var issuePriority = await _issuePriorityService.GetIssuePriorityAsync(id);
             if (issuePriority is null)
-            {
                 return NotFound();
-            }
             return Ok(issuePriority);
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IReadOnlyList<ReadIssuePriorityDto>>> GetAllIssuePriorities()
+        public async Task<IActionResult> GetAllIssuePriorities()
         {
             var issuePriorities = await _issuePriorityService.GetAllIssuePrioritiesAsync();
             return Ok(issuePriorities);
