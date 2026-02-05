@@ -20,6 +20,7 @@ internal class ProjectRepository : IProjectRepository
         var project = new Project
         {
             OwnerProfileId = createProjectDto.OwnerProfileId,
+            OrganizationId = createProjectDto.OrganizationId,
             Name = createProjectDto.Name,
             Key = createProjectDto.Key,
             Description = createProjectDto.Description
@@ -34,6 +35,7 @@ internal class ProjectRepository : IProjectRepository
             Name = newProject.Entity.Name,
             Description = newProject.Entity.Description,
             OwnerProfileId = newProject.Entity.OwnerProfileId,
+            OrganizationId = newProject.Entity.OrganizationId,
             CreatedAt = newProject.Entity.CreatedAt
         };
     }
@@ -53,6 +55,7 @@ internal class ProjectRepository : IProjectRepository
             Name = project.Name,
             Description = project.Description,
             OwnerProfileId = project.OwnerProfileId,
+            OrganizationId = project.OrganizationId,
             CreatedAt = project.CreatedAt
         };
     }
@@ -68,6 +71,7 @@ internal class ProjectRepository : IProjectRepository
                 Name = project.Name,
                 Description = project.Description,
                 OwnerProfileId = project.OwnerProfileId,
+                OrganizationId = project.OrganizationId,
                 CreatedAt = project.CreatedAt
             })
             .ToListAsync();
@@ -84,6 +88,7 @@ internal class ProjectRepository : IProjectRepository
                 Name = project.Name,
                 Description = project.Description,
                 OwnerProfileId = project.OwnerProfileId,
+                OrganizationId = project.OrganizationId,
                 CreatedAt = project.CreatedAt
             })
             .ToListAsync();
@@ -99,6 +104,7 @@ internal class ProjectRepository : IProjectRepository
                 Name = project.Name,
                 Description = project.Description,
                 OwnerProfileId = project.OwnerProfileId,
+                OrganizationId = project.OrganizationId,
                 CreatedAt = project.CreatedAt
             })
             .FirstOrDefaultAsync();
@@ -127,6 +133,7 @@ internal class ProjectRepository : IProjectRepository
             Name = project.Name,
             Description = project.Description,
             OwnerProfileId = project.OwnerProfileId,
+            OrganizationId = project.OrganizationId,
             CreatedAt = project.CreatedAt
         };
     }
@@ -143,6 +150,7 @@ internal class ProjectRepository : IProjectRepository
                 Name = p.Name,
                 Description = p.Description,
                 OwnerProfileId = p.OwnerProfileId,
+                OrganizationId = p.OrganizationId,
                 CreatedAt = p.CreatedAt
             })
             .ToListAsync();
