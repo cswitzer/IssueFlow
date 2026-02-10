@@ -232,6 +232,19 @@ public class IssueFlowDbContext : IdentityDbContext<ApplicationUser>
             .HasIndex(i => new { i.ProjectId, i.Key })
             .IsUnique();
 
+        // Deleting a profile should never delete issues
+        builder.Entity<Issue>()
+            .HasOne(i => i.ReporterProfile)
+            .WithMany(p => p.AssignedIssues)
+            .HasForeignKey(i => i.ReporterProfileId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Entity<Issue>()
+            .HasOne(i => i.AssigneeProfile)
+            .WithMany(p => p.ReportedIssues)
+            .HasForeignKey(i => i.AssigneeProfileId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         // Seed initial data
         SeedDatabase(builder);
         SeedRoles(builder);

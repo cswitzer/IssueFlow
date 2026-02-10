@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Auth\Validators\" />
     <Folder Include="Common\" />
+    <Folder Include="Issues\Dtos\Validators\" />
+    <Folder Include="Organizations\Dtos\Validators\" />
+    <Folder Include="Profiles\Dtos\Validators\" />
+    <Folder Include="Projects\Dtos\Validators\" />
   </ItemGroup>
 
   <ItemGroup>

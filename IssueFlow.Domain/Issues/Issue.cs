@@ -1,4 +1,5 @@
 ﻿using IssueFlow.Domain.Base;
+using IssueFlow.Domain.Profiles;
 using IssueFlow.Domain.Projects;
 
 namespace IssueFlow.Domain.Issues;
@@ -10,6 +11,10 @@ public class Issue : Entity
     public Guid IssueStatusId { get; set; }
     public Guid IssuePriorityId { get; set; }
 
+    // ADD FLUENT CONFIG AND RUN MIGRATIONS, ADD TO CREATE AND UPDATE DTOs
+    public Guid? AssigneeProfileId { get; set; }
+    public Guid? ReporterProfileId { get; set; }
+
     public required string Title { get; set; }
     public string Description { get; set; } = string.Empty;
     public required string Key { get; init; } // Pattern [Project.Key]-[IssueNumber]
@@ -20,4 +25,6 @@ public class Issue : Entity
     public IssueType? IssueType { get; set; }
     public IssueStatus? IssueStatus { get; set; }
     public IssuePriority? IssuePriority { get; set; }
+    public Profile? AssigneeProfile { get; set; }
+    public Profile? ReporterProfile { get; set; }
 }
