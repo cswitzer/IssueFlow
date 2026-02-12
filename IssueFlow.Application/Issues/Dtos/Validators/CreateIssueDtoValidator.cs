@@ -2,9 +2,9 @@
 
 namespace IssueFlow.Application.Issues.Dtos.Validators;
 
-public class CreateIssueValidator : AbstractValidator<CreateIssueDto>
+public class CreateIssueDtoValidator : AbstractValidator<CreateIssueDto>
 {
-    public CreateIssueValidator()
+    public CreateIssueDtoValidator()
     {
         RuleFor(x => x.Title)
             .NotEmpty()

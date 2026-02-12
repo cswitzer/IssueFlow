@@ -8,9 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Common\" />
-    <Folder Include="Organizations\Dtos\Validators\" />
-    <Folder Include="Profiles\Dtos\Validators\" />
-    <Folder Include="Projects\Dtos\Validators\" />
   </ItemGroup>
 
   <ItemGroup>
