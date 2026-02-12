@@ -9,12 +9,14 @@ public class UpdateProfileDtoValidator : AbstractValidator<UpdateProfileDto>
         RuleFor(x => x.FirstName)
             .NotEmpty()
             .MaximumLength(100)
-            .WithMessage("First name is required and must be at most 100 characters long.");
+            .When(x => x.FirstName != null)
+            .WithMessage("First name must not be empty and must be at most 100 characters long.");
 
         RuleFor(x => x.LastName)
             .NotEmpty()
             .MaximumLength(100)
-            .WithMessage("Last name is required and must be at most 100 characters long.");
+            .When(x => x.LastName != null)
+            .WithMessage("Last name must not be empty and must be at most 100 characters long.");
 
         RuleFor(x => x.ProfilePictureUrl)
             .MaximumLength(500)

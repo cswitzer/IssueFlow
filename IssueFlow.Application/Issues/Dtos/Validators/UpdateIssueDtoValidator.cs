@@ -9,12 +9,12 @@ public class UpdateIssueDtoValidator : AbstractValidator<UpdateIssueDto>
         RuleFor(x => x.Title)
             .MinimumLength(5)
             .MaximumLength(100)
-            .When(x => !string.IsNullOrEmpty(x.Title)) // only validate if Title is provided
+            .When(x => x.Title != null) // only validate if Title is provided
             .WithMessage("Title must be between 5 and 100 characters.");
         RuleFor(x => x.Description)
             .MinimumLength(10)
             .MaximumLength(1000)
-            .When(x => !string.IsNullOrEmpty(x.Description))
+            .When(x => x.Description != null)
             .WithMessage("Description must be between 10 and 1000 characters.");
         RuleFor(x => x.IssueTypeId)
             .NotEmpty()

@@ -14,12 +14,12 @@ public class UpdateProjectDtoValidator : AbstractValidator<UpdateProjectDto>
         RuleFor(x => x.Name)
             .NotEmpty()
             .MaximumLength(100)
-            .When(x => !string.IsNullOrEmpty(x.Name))
-            .WithMessage("Project name must be at most 100 characters long if provided.");
+            .When(x => x.Name != null)
+            .WithMessage("Project name must not be empty and must be at most 100 characters long.");
 
         RuleFor(x => x.Description)
             .MaximumLength(500)
-            .When(x => !string.IsNullOrEmpty(x.Description))
+            .When(x => x.Description != null)
             .WithMessage("Description must be at most 500 characters long.");
 
         RuleFor(x => x.IsArchived)
