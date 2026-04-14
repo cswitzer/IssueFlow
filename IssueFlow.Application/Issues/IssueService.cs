@@ -36,4 +36,9 @@ public class IssueService : IIssueService
     {
         return await _issueRepository.UpdateIssueAsync(id, updateIssueDto);
     }
+
+    //public async Task<ReadIssueDto?> AssignIssueAsync(Guid issueId, Guid assigneeId, Guid assignerId)
+    //{
+    //    return await _issueRepository.AssignIssueAsync(issueId, assigneeId, assignerId);
+    //}
 }
