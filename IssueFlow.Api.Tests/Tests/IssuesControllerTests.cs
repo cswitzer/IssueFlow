@@ -1,20 +1,35 @@
 ﻿using IssueFlow.Api.Controllers;
+using IssueFlow.Application.Authorization;
 using IssueFlow.Application.Issues;
 using IssueFlow.Application.Issues.Dtos;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using System.Security.Claims;
 
 namespace IssueFlow.Api.Tests.Tests;
 
 public class IssuesControllerTests
 {
     private readonly Mock<IIssueService> _mockIssueService;
+    private readonly Mock<IOrganizationAuthorizationService> _mockAuthorizationService;
     private readonly IssuesController _controller;
 
     public IssuesControllerTests()
     {
         _mockIssueService = new Mock<IIssueService>();
-        _controller = new IssuesController(_mockIssueService.Object);
+        _mockAuthorizationService = new Mock<IOrganizationAuthorizationService>();
+        _mockAuthorizationService.Setup(a => a.IsUserMemberOfOrganizationAsync(It.IsAny<string>(), It.IsAny<Guid>())).ReturnsAsync(true);
+        _mockAuthorizationService.Setup(a => a.IsUserMemberOfProjectOrganizationAsync(It.IsAny<string>(), It.IsAny<Guid>())).ReturnsAsync(true);
+        _mockAuthorizationService.Setup(a => a.IsUserMemberOfIssueOrganizationAsync(It.IsAny<string>(), It.IsAny<Guid>())).ReturnsAsync(true);
+        _controller = new IssuesController(_mockIssueService.Object, _mockAuthorizationService.Object);
+        _controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, "test-user-id") }, "Bearer"))
+            }
+        };
     }
 
     [Fact]

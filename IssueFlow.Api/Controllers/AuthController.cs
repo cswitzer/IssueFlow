@@ -1,12 +1,14 @@
 ﻿using IssueFlow.Application.Auth;
 using IssueFlow.Application.Profiles;
 using IssueFlow.Application.Profiles.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IssueFlow.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[AllowAnonymous]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;

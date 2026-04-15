@@ -1,24 +1,38 @@
-﻿using IssueFlow.Application.Organizations;
+﻿using IssueFlow.Api.Extensions;
+using IssueFlow.Application.Authorization;
+using IssueFlow.Application.Organizations;
 using IssueFlow.Application.Organizations.Dtos;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IssueFlow.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class OrganizationsController : ControllerBase
     {
         private readonly IOrganizationService _organizationService;
+        private readonly IOrganizationAuthorizationService _authorizationService;
 
-        public OrganizationsController(IOrganizationService organizationService)
+        public OrganizationsController(
+            IOrganizationService organizationService,
+            IOrganizationAuthorizationService authorizationService)
         {
             _organizationService = organizationService;
+            _authorizationService = authorizationService;
         }
 
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetOrganization(Guid id)
         {
+            var userId = User.GetUserId();
+            if (userId is null)
+                return Unauthorized();
+
+            if (!await _authorizationService.IsUserMemberOfOrganizationAsync(userId, id))
+                return Forbid();
+
             var organization = await _organizationService.GetOrganizationAsync(id);
             if (organization is null)
                 return NotFound();
@@ -49,6 +63,13 @@ namespace IssueFlow.Api.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateOrganization([FromRoute] Guid id, [FromBody] UpdateOrganizationDto updateOrganizationDto)
         {
+            var userId = User.GetUserId();
+            if (userId is null)
+                return Unauthorized();
+
+            if (!await _authorizationService.IsUserMemberOfOrganizationAsync(userId, id))
+                return Forbid();
+
             var organization = await _organizationService.UpdateOrganizationAsync(id, updateOrganizationDto);
             if (organization is null)
                 return NotFound();
@@ -58,6 +79,13 @@ namespace IssueFlow.Api.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteOrganization([FromRoute] Guid id)
         {
+            var userId = User.GetUserId();
+            if (userId is null)
+                return Unauthorized();
+
+            if (!await _authorizationService.IsUserMemberOfOrganizationAsync(userId, id))
+                return Forbid();
+
             var organization = await _organizationService.DeleteOrganizationAsync(id);
             if (organization is null)
                 return NotFound();

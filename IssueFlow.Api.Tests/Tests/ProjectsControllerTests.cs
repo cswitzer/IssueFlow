@@ -1,21 +1,35 @@
 using IssueFlow.Api.Controllers;
 using IssueFlow.Api.Tests.Utilities;
+using IssueFlow.Application.Authorization;
 using IssueFlow.Application.Projects;
 using IssueFlow.Application.Projects.Dtos;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using System.Security.Claims;
 
 namespace IssueFlow.Api.Tests.Tests;
 
 public class ProjectsControllerTests
 {
     private readonly Mock<IProjectService> _mockProjectService;
+    private readonly Mock<IOrganizationAuthorizationService> _mockAuthorizationService;
     private readonly ProjectsController _controller;
 
     public ProjectsControllerTests()
     {
         _mockProjectService = new Mock<IProjectService>();
-        _controller = new ProjectsController(_mockProjectService.Object);
+        _mockAuthorizationService = new Mock<IOrganizationAuthorizationService>();
+        _mockAuthorizationService.Setup(a => a.IsUserMemberOfOrganizationAsync(It.IsAny<string>(), It.IsAny<Guid>())).ReturnsAsync(true);
+        _mockAuthorizationService.Setup(a => a.IsUserMemberOfProjectOrganizationAsync(It.IsAny<string>(), It.IsAny<Guid>())).ReturnsAsync(true);
+        _controller = new ProjectsController(_mockProjectService.Object, _mockAuthorizationService.Object);
+        _controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, "test-user-id") }, "Bearer"))
+            }
+        };
     }
 
     [Fact]

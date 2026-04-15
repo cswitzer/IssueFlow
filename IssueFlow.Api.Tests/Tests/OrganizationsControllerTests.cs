@@ -1,21 +1,36 @@
 using IssueFlow.Api.Controllers;
 using IssueFlow.Api.Tests.Utilities;
+using IssueFlow.Application.Authorization;
 using IssueFlow.Application.Organizations;
 using IssueFlow.Application.Organizations.Dtos;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using System.Security.Claims;
 
 namespace IssueFlow.Api.Tests.Tests;
 
 public class OrganizationsControllerTests
 {
     private readonly Mock<IOrganizationService> _mockOrganizationService;
+    private readonly Mock<IOrganizationAuthorizationService> _mockAuthorizationService;
     private readonly OrganizationsController _controller;
 
     public OrganizationsControllerTests()
     {
         _mockOrganizationService = new Mock<IOrganizationService>();
-        _controller = new OrganizationsController(_mockOrganizationService.Object);
+        _mockAuthorizationService = new Mock<IOrganizationAuthorizationService>();
+
+        // Assume the user is a member of the organization for all tests and that the user is authenticated via the claim
+        _mockAuthorizationService.Setup(a => a.IsUserMemberOfOrganizationAsync(It.IsAny<string>(), It.IsAny<Guid>())).ReturnsAsync(true);
+        _controller = new OrganizationsController(_mockOrganizationService.Object, _mockAuthorizationService.Object);
+        _controller.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext
+            {
+                User = new ClaimsPrincipal(new ClaimsIdentity(new[] { new Claim(ClaimTypes.NameIdentifier, "test-user-id") }, "Bearer"))
+            }
+        };
     }
 
     [Fact]

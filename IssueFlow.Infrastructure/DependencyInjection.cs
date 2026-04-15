@@ -1,9 +1,11 @@
 ﻿using IssueFlow.Application.Auth;
+using IssueFlow.Application.Authorization;
 using IssueFlow.Application.Issues;
 using IssueFlow.Application.Organizations;
 using IssueFlow.Application.Profiles;
 using IssueFlow.Application.Projects;
 using IssueFlow.Application.Repositories;
+using IssueFlow.Infrastructure.Authorization;
 using IssueFlow.Infrastructure.Identity;
 using IssueFlow.Infrastructure.Persistence;
 using IssueFlow.Infrastructure.Repositories;
@@ -62,6 +64,9 @@ public static class DependencyInjection
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
                 };
             });
+
+        // Authorization
+        services.AddScoped<IOrganizationAuthorizationService, OrganizationAuthorizationService>();
 
         // Auth Services
         services.AddScoped<IJwtTokenService, JwtTokenService>();

@@ -1,24 +1,38 @@
-﻿using IssueFlow.Application.Projects;
+﻿using IssueFlow.Api.Extensions;
+using IssueFlow.Application.Authorization;
+using IssueFlow.Application.Projects;
 using IssueFlow.Application.Projects.Dtos;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IssueFlow.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProjectsController : ControllerBase
     {
         private readonly IProjectService _projectService;
+        private readonly IOrganizationAuthorizationService _authorizationService;
 
-        public ProjectsController(IProjectService projectService)
+        public ProjectsController(
+            IProjectService projectService,
+            IOrganizationAuthorizationService authorizationService)
         {
             _projectService = projectService;
+            _authorizationService = authorizationService;
         }
 
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetProject(Guid id)
         {
+            var userId = User.GetUserId();
+            if (userId is null)
+                return Unauthorized();
+
+            if (!await _authorizationService.IsUserMemberOfProjectOrganizationAsync(userId, id))
+                return Forbid();
+
             var project = await _projectService.GetProjectAsync(id);
             if (project is null)
                 return NotFound();
@@ -42,6 +56,13 @@ namespace IssueFlow.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateProject([FromBody] CreateProjectDto createProjectDto)
         {
+            var userId = User.GetUserId();
+            if (userId is null)
+                return Unauthorized();
+
+            if (!await _authorizationService.IsUserMemberOfOrganizationAsync(userId, createProjectDto.OrganizationId))
+                return Forbid();
+
             var createdProject = await _projectService.CreateProjectAsync(createProjectDto);
             return CreatedAtAction(nameof(GetProject), new { id = createdProject.Id }, createdProject);
         }
@@ -49,6 +70,13 @@ namespace IssueFlow.Api.Controllers
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateProject([FromRoute] Guid id, [FromBody] UpdateProjectDto updateProjectDto)
         {
+            var userId = User.GetUserId();
+            if (userId is null)
+                return Unauthorized();
+
+            if (!await _authorizationService.IsUserMemberOfProjectOrganizationAsync(userId, id))
+                return Forbid();
+
             var updatedProject = await _projectService.UpdateProjectAsync(id, updateProjectDto);
             if (updatedProject is null)
                 return NotFound();
@@ -58,6 +86,13 @@ namespace IssueFlow.Api.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteProject([FromRoute] Guid id)
         {
+            var userId = User.GetUserId();
+            if (userId is null)
+                return Unauthorized();
+
+            if (!await _authorizationService.IsUserMemberOfProjectOrganizationAsync(userId, id))
+                return Forbid();
+
             var deletedProject = await _projectService.DeleteProjectAsync(id);
             if (deletedProject is null)
                 return NotFound();

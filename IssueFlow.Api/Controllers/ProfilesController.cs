@@ -1,11 +1,13 @@
 ﻿using IssueFlow.Application.Profiles;
 using IssueFlow.Application.Profiles.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IssueFlow.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class ProfilesController : ControllerBase
 {
     private readonly IProfileService _profileService;
